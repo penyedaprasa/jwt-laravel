@@ -1,0 +1,14 @@
+- cloning
+ (clonning url diatas)
+
+- install dependencis 
+ (composer install)
+ 
+- generate key
+ (php artisan key:generate)
+
+- copy file env.examle jadi env
+ (cp .env.example .env)
+
+- migration db
+ (php artisan migrate)
