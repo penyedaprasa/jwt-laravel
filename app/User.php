@@ -9,15 +9,15 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
-    protected $primaryKey = 'users_id';
-    protected $table = 'pms_users';
+    protected $primaryKey = 'id';
+    protected $table = 'users';
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'group_id', 'password',
+        'name', 'email', 'password',
     ];
 
     /**

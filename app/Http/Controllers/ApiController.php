@@ -10,50 +10,12 @@ use DB;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Client;
 use App\User;
-use App\Group;
-use App\Menu;
-use App\Part;
-use App\Nc;
 use Hash;
 use JWTAuth;
 
 
 class ApiController extends Controller
 {
-    // Nc
-    public function ncAdd(Request $request){
-        $validator = Validator::make($request->all(),[
-            'nama'          => 'required',
-            'dokumen'       => 'required',
-            'keterangan'    => 'required',
-            'date_in'       => 'required|string|date|max:255',
-            'date_out'      => 'required|string|date|max:255',
-        ]);
-        
-
-        if($validator->fails()){
-            return response()->json([
-                'msg'  => 'Gagal menambah data',
-                'error' => $validator->errors(),
-                'status' => 400,
-            ]);
-        } else {
-            $data = Nc::create([
-                'nc_nama'        => $request->nama,
-                'nc_dokumen'     => $request->dokumen,
-                'nc_keterangan'  => $request->keterangan,
-                'users_id'       => 1,
-                'date_in'        => $request->date_in,
-                'date_out'       => $request->date_out,
-            ]);
-            return response()->json([
-                'msg'  => 'Sukses menambah data',
-                'error' => $data,
-                'status' => 200,
-            ]);
-        }        
-    }
-
     public function postLogin(Request $request){
         $validator = Validator::make($request->all(), [
             'email'     => 'required',
@@ -130,15 +92,6 @@ class ApiController extends Controller
         ]);
     }
 
-    public function listPart(){
-        $data = Part::all();
-        return response()->json([
-            'msg'     => 'list part',
-            'user'    => $data,
-            'status'  => 200
-        ]);
-    }
-
     // token jwt login
     public function authenticate(Request $request)
         {
@@ -174,8 +127,8 @@ class ApiController extends Controller
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:25|unique:pms_users',
-            'email' => 'required|string|email|max:255|unique:pms_users',
+            'name' => 'required|string|max:25|unique:users',
+            'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',        
         ]);
 
@@ -198,7 +151,6 @@ class ApiController extends Controller
 
         return response()->json(compact('user','token'),201);
     }
-
     // token jwt logout
     function logout()
     { 
