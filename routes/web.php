@@ -12,5 +12,9 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    // return view('welcome');
+    $res['success'] = true;
+    $res['result'] = "API for Wharna-APP!";
+    return response($res);
+
 });
