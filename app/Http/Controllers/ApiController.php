@@ -25,58 +25,60 @@ class ApiController extends Controller
             if (! $token = JWTAuth::attempt($credentials)) {
                 // return response()->json(['error' => 'invalid_credentials'], 400);
                 return response()->json([
+                    'status'    => 400,
                     'msg'       => 'failed login',
                     'error'     => 'email or password invalid',
-                    'status'    => 400,
                 ], 400);
             }
         } catch (JWTException $e) {
             return response()->json([
+                'status'    => 500,
                 'msg'       => 'invalid create token',
                 'error'     => 'could_not_create_token', 
-                'status'    => 500
             ], 500);
         }
 
-        // return response()->json(compact('token'));
+        $user = DB::select("SELECT users.id, users.name, users.email, users.role_id, roles.name as role_name, roles.description as role_description FROM users JOIN roles ON users.role_id = roles.id WHERE users.email = '$request->email'");
         return response()->json([
-            'msg'       => 'user berhasil login',
-            'data'      => $request->email,
+            'status'    => 200,
+            'msg'       => 'success login',
+            'data'      => $user[0],
             'token'     => $token,
-            'status'    => 200
         ], 200);
     }
 
-    // token jwt regis
+    // token jwt create
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'name'      => 'required|string|max:25|unique:users',
             'email'     => 'required|string|email|max:255|unique:users',
             'password'  => 'required|string|min:6|confirmed',        
+            'role_id'  => 'required',        
         ]);
 
         if($validator->fails()){
             // return response()->json($validator->errors()->toJson(), 400);
             return response()->json([
+                'status'    => 400,
                 'success'   => false, 
                 'msg'       => $validator->errors()->toJson(),
-                'status'    => 400,
             ], 400);
         }
 
         $user = User::create([
             'name'      => $request->get('name'),
             'email'     => $request->get('email'),
+            'role_id'     => $request->get('role_id'),
             'password'  => Hash::make($request->get('password')),
         ]);
 
         $token = JWTAuth::fromUser($user);
         return response()->json([
+            'status'    => 201,
             'msg'       => 'succes register',
-            'user'      => $user,
+            'data'      => $user,
             'token'     => $token,
-            'status'    => 201
         ],201);    
         // return response()->json(compact('user','token'),201);
     }
@@ -87,15 +89,15 @@ class ApiController extends Controller
             JWTAuth::invalidate(JWTAuth::getToken());
             // return response()->json(['success' => true, 'message' => 'Logout successful'], 200);
             return response()->json([
+                'status' => 200,
                 'success' => true,
                 'msg'  => 'Logout successful',
-                'status' => 200
-            ]);
+            ],200);
         } catch (JWTException $e) {
             return response()->json([
+                'status' => 500,
                 'success' => false, 
                 'msg' => 'Failed to logout, please try again',
-                'status' => 500,
             ]);
         } 
     }

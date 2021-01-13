@@ -17,6 +17,7 @@ class CreateUsersProfileTable extends Migration
             $table->increments('id');
             $table->integer('user_id');
             $table->enum('gender', ['male', 'female']);
+            $table->string('phone', 255);
             $table->string('address', 255);
             // $table->timestamps();
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));

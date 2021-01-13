@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateLocationEventTable extends Migration
+class CreateStatusOrderTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,11 @@ class CreateLocationEventTable extends Migration
      */
     public function up()
     {
-        Schema::create('location_event', function (Blueprint $table) {
+        Schema::create('order_status', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('event_id');
-            $table->text('location_address');
-            $table->string('lon', 50)->nullable();
-            $table->string('lat', 50)->nullable();
-            // $table->timestamps();    
+            $table->string('name', 30);
+            $table->string('description', 30);
+            $table->enum('enabled', ['Y', 'N'])->default('Y');
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
         
@@ -33,6 +31,6 @@ class CreateLocationEventTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('location_event');
+        Schema::dropIfExists('order_status');
     }
 }

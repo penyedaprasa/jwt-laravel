@@ -16,7 +16,9 @@ class CreateTiketTable extends Migration
         Schema::create('total_ticket', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('event_id');
+            $table->integer('ticket_tersedia');
             $table->integer('total_ticket');
+            $table->string('price_ticket');
             // $table->timestamps();
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));

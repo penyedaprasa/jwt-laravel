@@ -18,3 +18,6 @@ Route::get('/', function () {
     return response($res);
 
 });
+
+Route::get('auth/{provider}', 'Auth\RegisterController@redirectToProvider');
+Route::get('auth/{provider}/callback', 'Auth\RegisterController@handleProviderCallback');

@@ -17,6 +17,9 @@ class CreateEventOrderTable extends Migration
             $table->increments('id');
             $table->integer('user_id');
             $table->integer('event_id');
+            $table->integer('status_id');
+            $table->integer('ticket_order');
+            $table->string('total_price_ticket');
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
             // $table->timestamps();

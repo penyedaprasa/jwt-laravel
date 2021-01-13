@@ -20,12 +20,12 @@ class DatabaseSeeder extends Seeder
                 "description" => "Super Admin"
             ],
             [
-                "name"        => "Admin",
-                "description" => "Admin"
+                "name"        => "Event Organizer",
+                "description" => "Event Organizer"
             ],
             [
-                "name"        => "Client",
-                "description" => "Client"
+                "name"        => "User",
+                "description" => "User"
             ]
         ]);
         
@@ -43,10 +43,29 @@ class DatabaseSeeder extends Seeder
                 'password'  => Hash::make('adminadmin'),
             ],
             [
-                'name'      => 'Client',
-                'email'     => 'client@local.host',
+                'name'      => 'User',
+                'email'     => 'user@local.host',
                 'role_id'   => 3,
                 'password'  => Hash::make('adminadmin'),
+            ]
+        ]);
+
+        DB::table('order_status')->insert([
+            [
+                'name'      => 'pending',
+                'description'     => 'pending',
+            ],
+            [
+                'name'      => 'waiting confirmation',
+                'description'     => 'waiting confirmation',
+            ],
+            [
+                'name'      => 'Finish',
+                'description'     => 'Finish',
+            ],
+            [
+                'name'      => 'Cancel',
+                'nadescriptionme'      => 'Cancel',
             ]
         ]);
     }
