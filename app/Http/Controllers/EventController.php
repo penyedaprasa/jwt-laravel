@@ -13,6 +13,19 @@ use Illuminate\Support\Carbon;
 
 class EventController extends Controller
 {
+    // random string
+    function randomString() {
+        $length = 6;
+        $stre = "";
+        $characters = array_merge(range('A','Z'), range('0','9'));
+        $max = count($characters) - 1;
+        for ($i = 0; $i < $length; $i++) {
+            $rand = mt_rand(0, $max);
+            $stre .= $characters[$rand];
+        }
+        return $stre;
+    }
+
     public function index(Request $request) 
     {
         $id = $request->id;
@@ -69,6 +82,28 @@ class EventController extends Controller
             $location_address = $request->location_address;
             $lon = $request->lon;
             $lat = $request->lat;
+
+            //create image base64
+            $photo = $request->input('image');
+            $photo = str_replace('data:image/png;base64,', '', $photo);
+            $photo = str_replace(' ', '+', $photo);
+            $data = base64_decode($photo);
+            // $photo = base64_decode($photo);
+            
+            // $savename = time();
+            // $savename = md5($savename).'.PNG';
+            $savename = $this->randomString();
+            $savename = $savename.'.PNG';
+
+            // file upload to directory
+            $path = public_path().'/storage/images/';
+            if (!File::exists($path)){
+                File::makeDirectory($path);
+                file_put_contents("storage/images/".$savename, $data);
+            }else{
+                file_put_contents("storage/images/".$savename, $data);
+            }
+
             $event = Events::where('id',$request->id)->first();
             if(empty($event)){
                 $event = new Events();
@@ -93,7 +128,8 @@ class EventController extends Controller
                 ]);
                 DB::table('image_event')->insert([
                     'event_id' => $event->id,
-                    'image_url' => $image_url
+                    // 'image_url' => $image_url,
+                    'image_url' => asset('storage/images/'.$savename),
                 ]);
                 DB::table('location_event')->insert([
                     'event_id' => $event->id,
@@ -169,5 +205,49 @@ class EventController extends Controller
             'status'  => 400,
             'msg'     => 'Terjadi Kesalahan',
         ],400); 
+    }
+
+    public function base64(Request $request)
+    {
+        // dd('test');
+		$photo = $request->input('image');
+		$photo = str_replace('data:image/png;base64,', '', $photo);
+		$photo = str_replace(' ', '+', $photo);
+		$data = base64_decode($photo);
+        // $photo = base64_decode($photo);
+        
+		$savename = time();
+		$savename = md5($savename).'.PNG';
+        // file upload to directory
+        $path = public_path().'/storage/images/';
+        if (!File::exists($path)){
+            File::makeDirectory($path);
+            file_put_contents("storage/images/".$savename, $data);
+        }else{
+            file_put_contents("storage/images/".$savename, $data);
+        }
+        // echo '<img src="'.asset('storage/images/'.$savename).'" alt="Girl in a jacket" width="100%" height="100%">';
+			
+			// save to DB
+			// $send = DigitalMonitoringHitNow::where('id_stations',$id_station)->first();
+			// if(empty($send)){
+			// 	$send = new DigitalMonitoringHitNow();
+			// 	$send->id_stations = $id_station;
+			// }
+			// File::delete($path.$send->tampilan_sekarang);
+			// $send->tampilan_sekarang = $savename;
+			// $send->save();
+		
+			// return response()->json([
+			// 	'message' => 'failed',
+			// 	'data' 	  => 'failed upload data',
+			// 	'status'  => 400
+			// ], 400);
+		
+		return response()->json([
+			'message' => 'success',
+			'data' 	  => asset('storage/images/'.$savename),
+			'status'  => 200
+		],200);
     }
 }

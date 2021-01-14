@@ -6,6 +6,8 @@ use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use App\SocialProvider;
+use JWTAuth;
 
 use Socialite;
 
@@ -104,10 +106,12 @@ class RegisterController extends Controller
         if(!$socialProvider)
         {
             //create a new user and provider
-            $user = User::firstOrCreate(
-                ['email' => $socialUser->getEmail()],
-                ['name' => $socialUser->getName()]
-            );
+            // dd(User::all());
+            $user = User::firstOrCreate([
+                'email' => $socialUser->getEmail(),
+                'name' => $socialUser->getName(),
+                'role_id' => '3'    
+            ]);
 
             $user->socialProviders()->create(
                 ['provider_id' => $socialUser->getId(), 'provider' => $provider]
@@ -116,10 +120,17 @@ class RegisterController extends Controller
         }
         else
             $user = $socialProvider->user;
-
+        $token = JWTAuth::fromUser($user);
+        return response()->json([
+            'status'    => 201,
+            'msg'       => 'succes register',
+            'data'      => $user,
+            'token'     => $token,
+        ],201); 
+        dd($user);
         auth()->login($user);
-
         return redirect('/home');
+
 
     }
 

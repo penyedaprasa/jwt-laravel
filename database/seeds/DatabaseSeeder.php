@@ -52,12 +52,12 @@ class DatabaseSeeder extends Seeder
 
         DB::table('order_status')->insert([
             [
-                'name'      => 'pending',
-                'description'     => 'pending',
+                'name'      => 'Menunggu pembayaran',
+                'description'     => 'Menunggu pembayaran',
             ],
             [
-                'name'      => 'waiting confirmation',
-                'description'     => 'waiting confirmation',
+                'name'      => 'Sudah dibayar',
+                'description'     => 'Sudah dibayar',
             ],
             [
                 'name'      => 'Finish',

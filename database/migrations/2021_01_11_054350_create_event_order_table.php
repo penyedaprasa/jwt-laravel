@@ -15,6 +15,7 @@ class CreateEventOrderTable extends Migration
     {
         Schema::create('event_order', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('order_code');
             $table->integer('user_id');
             $table->integer('event_id');
             $table->integer('status_id');

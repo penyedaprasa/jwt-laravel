@@ -33,11 +33,12 @@ Route::group(['prefix' => 'v1'], function() {
 		Route::post('events/delete/{id}', 'EventController@delete');
 		Route::get('events/orders', 'OrderController@index');
 		Route::post('events/order/create', 'OrderController@store');
+		Route::post('events/order/delete/{code}', 'OrderController@delete');
 		Route::post('events/order/update', 'OrderController@update');
+		Route::get('users', 'UserController@index');
+		Route::post('users/profile/edit/{id}', 'UserController@editProfile');
+		Route::post('users/create', 'UserController@createUser');
 	});
-	Route::get('users', 'UserController@index');
-	Route::post('users/profile/edit/{id}', 'UserController@editProfile');
-	Route::post('users/create', 'UserController@createUser');
 });
 
 
