@@ -9,6 +9,8 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use App\SocialProvider;
 use JWTAuth;
 
+use Illuminate\Support\Facades\DB;
+
 use Socialite;
 
 class RegisterController extends Controller
@@ -102,20 +104,30 @@ class RegisterController extends Controller
             return redirect('/');
         }
         //check if we have logged provider
+        // dd($socialUser);
         $socialProvider = SocialProvider::where('provider_id',$socialUser->getId())->first();
         if(!$socialProvider)
         {
             //create a new user and provider
-            // dd(User::all());
             $user = User::firstOrCreate([
                 'email' => $socialUser->getEmail(),
                 'name' => $socialUser->getName(),
                 'role_id' => '3'    
             ]);
-
+                
             $user->socialProviders()->create(
                 ['provider_id' => $socialUser->getId(), 'provider' => $provider]
             );
+
+            $check_profile = DB::table('user_profile')->where('user_id', $user->id)->first();
+            if(empty($check_profile)){
+                DB::table('user_profile')->insert([
+                    'user_id' => $user->id,
+                    'avatar' => $socialUser->avatar,
+                ]);
+            }
+
+            // dd($socialUser->avatar);
 
         }
         else
@@ -123,7 +135,7 @@ class RegisterController extends Controller
         $token = JWTAuth::fromUser($user);
         return response()->json([
             'status'    => 201,
-            'msg'       => 'succes register',
+            'msg'       => 'succes login',
             'data'      => $user,
             'token'     => $token,
         ],201); 

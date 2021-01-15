@@ -16,9 +16,10 @@ class CreateUsersProfileTable extends Migration
         Schema::create('user_profile', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id');
-            $table->enum('gender', ['male', 'female']);
-            $table->string('phone', 255);
-            $table->string('address', 255);
+            $table->text('avatar')->nullable();
+            $table->enum('gender', ['male', 'female'])->nullable();
+            $table->string('phone', 255)->nullable();
+            $table->string('address', 255)->nullable();
             // $table->timestamps();
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));

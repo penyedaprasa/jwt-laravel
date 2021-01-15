@@ -14,7 +14,7 @@ class CreateViewUserTable extends Migration
     public function up()
     {
         DB::statement("DROP VIEW if exists v_users");
-        DB::statement("CREATE VIEW v_users AS SELECT users.id, users.name, users.email, roles.name as role_name, roles.description as role_description, b.gender, b.phone, b.address, b.created_at, b.updated_at FROM users JOIN roles ON users.role_id = roles.id LEFT JOIN user_profile b ON  users.id = b.user_id");
+        DB::statement("CREATE VIEW v_users AS SELECT users.id, users.name, users.email, roles.name as role_name, roles.description as role_description, b.avatar, b.gender, b.phone, b.address, b.created_at, b.updated_at FROM users JOIN roles ON users.role_id = roles.id LEFT JOIN user_profile b ON  users.id = b.user_id");
     }
 
     /**

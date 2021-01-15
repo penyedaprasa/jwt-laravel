@@ -63,7 +63,7 @@ class OrderController extends Controller
         if($validator->fails()){
             return response()->json([
                 'status'  => 400,
-                'msg'    => $validator->errors()
+                'msg'    => $validator->errors()->toJson()
             ],400); 
         } else {
             $event_id = $request->event_id;
@@ -115,7 +115,7 @@ class OrderController extends Controller
         if($validator->fails()){
             return response()->json([
                 'status'  => 400,
-                'msg'    => $validator->errors()
+                'msg'    => $validator->errors()->toJson()
             ],400); 
         } else {
             $event_id = $request->event_id;

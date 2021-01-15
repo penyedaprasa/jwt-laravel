@@ -13,6 +13,7 @@ use League\Flysystem\Filesystem;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Carbon; 
 
+
 class UserController extends Controller
 {
     public function index(Request $request) 
@@ -50,6 +51,28 @@ class UserController extends Controller
             $phone = $request->phone;
             $address = $request->address;
 
+            $photo = $request->input('avatar');
+            if($photo){
+                $photo = str_replace('data:image/png;base64,', '', $photo);
+                $photo = str_replace(' ', '+', $photo);
+                $data = base64_decode($photo);
+                // $photo = base64_decode($photo);
+                
+                $savename = time();
+                $savename = md5($savename).'.PNG';
+                // file upload to directory
+                $path = public_path().'/storage/avatar/';
+                if (!File::exists($path)){
+                    File::makeDirectory($path);
+                    file_put_contents("storage/avatar/".$savename, $data);
+                }else{
+                    file_put_contents("storage/avatar/".$savename, $data);
+                }
+                $avatar = asset('storage/avatar/'.$savename);
+            } else{
+                $avatar = asset('media/avatar/default.jpg');
+            }
+
             $user = DB::table('users')->where('id', $id)->first();
             if(empty($user)){
                 return response()->json([
@@ -64,6 +87,7 @@ class UserController extends Controller
                     'gender' => $gender,
                     'phone' => $phone,
                     'address' => $address,
+                    'avatar' => $avatar,
                 ]);
             } else{
                 DB::table('user_profile')->
@@ -71,6 +95,7 @@ class UserController extends Controller
                     'gender' => $gender,
                     'phone' => $phone,
                     'address' => $address,
+                    'avatar' => $avatar,
                 ]);
             }
             return response()->json([
@@ -110,5 +135,4 @@ class UserController extends Controller
         ],200);   
     }
 
-    
 }

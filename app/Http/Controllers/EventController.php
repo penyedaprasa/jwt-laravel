@@ -66,7 +66,7 @@ class EventController extends Controller
         if($validator->fails()){
             return response()->json([
                 'status'  => 400,
-                'msg'    => $validator->errors()
+                'msg'    => $validator->errors()->toJson()
             ],200); 
         } else {
             $event_name = $request->event_name;
@@ -197,7 +197,6 @@ class EventController extends Controller
             ],200); 
         } catch (\Exception $e) {
             DB::rollback();
-            dd($e);
         }
         // toast()->error('Terjadi Kesalahan', $this->title);
         // return redirect()->back();
@@ -226,23 +225,6 @@ class EventController extends Controller
         }else{
             file_put_contents("storage/images/".$savename, $data);
         }
-        // echo '<img src="'.asset('storage/images/'.$savename).'" alt="Girl in a jacket" width="100%" height="100%">';
-			
-			// save to DB
-			// $send = DigitalMonitoringHitNow::where('id_stations',$id_station)->first();
-			// if(empty($send)){
-			// 	$send = new DigitalMonitoringHitNow();
-			// 	$send->id_stations = $id_station;
-			// }
-			// File::delete($path.$send->tampilan_sekarang);
-			// $send->tampilan_sekarang = $savename;
-			// $send->save();
-		
-			// return response()->json([
-			// 	'message' => 'failed',
-			// 	'data' 	  => 'failed upload data',
-			// 	'status'  => 400
-			// ], 400);
 		
 		return response()->json([
 			'message' => 'success',
