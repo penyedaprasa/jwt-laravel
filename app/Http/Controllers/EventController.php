@@ -60,6 +60,7 @@ class EventController extends Controller
             'total_ticket'=>'required',
             'price_ticket'=>'required',
             'location_address'=>'required',
+            'category_event_id'=>'required',
             // 'lon'=>'required',
             // 'lat'=>'required',
         ]);
@@ -80,6 +81,7 @@ class EventController extends Controller
             $total_ticket = $request->total_ticket;
             $image_url = $request->image_url;
             $location_address = $request->location_address;
+            $category_event_id = $request->category_event_id;
             $lon = $request->lon;
             $lat = $request->lat;
 
@@ -111,6 +113,7 @@ class EventController extends Controller
             $event->event_name = $event_name;
             $event->event_penyelenggara = $event_penyelenggara;
             $event->description = $description;
+            $event->category_event_id = $category_event_id;
             $event->save();
             if(empty($request->id)){
                 DB::table('schedule_event')->insert([
